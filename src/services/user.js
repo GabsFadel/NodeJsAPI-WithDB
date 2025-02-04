@@ -24,12 +24,6 @@ class ServiceUser {
   async Update(id, email, password) {
     const oldUser = await user.findByPk(id)
 
-    // if (!email) { 
-    //   throw new Error("Email is required to update")
-    // } else if (!password) {
-    //   throw new Error("Password is required to update")
-    // }
-
     oldUser.email = email || oldUser.email
     oldUser.password = password || oldUser.password
 
