@@ -1,15 +1,15 @@
 const user = require("../model/user");
 
 class ServiceUser {
-  async FindAll() {
-      return user.findAll();
+  async FindAll(transaction) {
+      return user.findAll({transaction});
   }
 
-  FindById(id) {
-      return user.findByPk(id);
+  async FindById(id, transaction) {
+      return user.findByPk(id, {transaction});
   } 
 
-  async Create(email, password) { // promise -> promeça que será executada a ação de insert dentro do banco a partir do metodo, é async 
+  async Create(email, password, transaction) { // promise -> promeça que será executada a ação de insert dentro do banco a partir do metodo, é async 
       if (!email) {
       throw new Error("Email is required")
     } else if (!password) { 
@@ -18,23 +18,26 @@ class ServiceUser {
 
     return user.create({
       email, password 
-    })
+    }, { transaction })
   }
 
-  async Update(id, email, password) {
-    const oldUser = await user.findByPk(id)
+  async Update(id, email, password, transaction) {
+    const oldUser = await this.FindById(id, transaction)
 
     oldUser.email = email || oldUser.email
     oldUser.password = password || oldUser.password
 
-    oldUser.save()
+    oldUser.save({ transaction })
 
     return oldUser
   }
 
-  async Delete(id) {
-      const oldUser = await user.findByPk(id)
-      oldUser.destroy()
+  async Delete(id, transaction) {
+      const oldUser = await this.FindById(id, transaction)
+
+      oldUser.destroy({ transaction })
+
+      return true 
   }
 }
 
