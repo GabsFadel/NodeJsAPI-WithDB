@@ -14,6 +14,7 @@ async FindAll(_, res) {
 
 async FindById(req, res) {
       try {
+          console.log('findById', req.session)
           const { id } = req.params
           const result = await ServicePerson.FindById(id)
 

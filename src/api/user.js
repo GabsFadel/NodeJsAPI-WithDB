@@ -59,6 +59,17 @@ async Delete(req, res) {
       }
   } 
 
+async Login(req, res) {
+      try {
+          const { email, password} = req.body
+          const token = await ServiceUser.Login(email, password)
+
+          res.status(200).send({ token })
+      } catch (e) {
+          res.status(500).send({ msg: e.message })
+      }
+  }
+
 }
 
 module.exports = new ApiUser();
